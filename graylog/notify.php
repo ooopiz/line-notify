@@ -21,6 +21,10 @@ function send_line_notify($message, $token) {
 $jsonInput = file_get_contents('php://input');
 $arrInput  = json_decode($jsonInput, true);
 //error_log($jsonInput);
+if ($arrInput['check_result']['result_description'] == '') {
+    echo ("No input");
+    die();
+}
 
 $twTz  = new DateTimeZone('Asia/Taipei');
 $utcTz = new DateTimeZone('UTC');
