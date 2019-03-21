@@ -50,12 +50,11 @@ $streamUrl =
 
 $alertCondition = $arrInput['stream']['alert_conditions'][0];
 $message = "" . PHP_EOL;
-$message = $message . PHP_EOL . "Alert Description : " . $arrInput['check_result']['result_description'];
 $alertTriggeredAt->setTimezone($twTz);
-$message = $message . PHP_EOL . "Alert Date : "        . '`' . $alertTriggeredAt->format('Y-m-d H:i:s') . '`';
-$message = $message . PHP_EOL . "Stream Title : "      . $arrInput['stream']['title'];
-$message = $message . PHP_EOL . "Alert Condition : "   . $alertCondition['title'];
-$message = $message . PHP_EOL . "Stream Url : "        . urlencode($streamUrl);
+$message = $message . PHP_EOL . "`[" . $arrInput['stream']['title'] . "] " . $alertTriggeredAt->format('Y-m-d H:i:s') . '`';
+$message = $message . PHP_EOL . $arrInput['check_result']['result_description'];
+$message = $message . PHP_EOL . urlencode($streamUrl);
+//$message = $message . PHP_EOL . "Alert Condition : "   . $alertCondition['title'];
 
 //error_log($message);
 
