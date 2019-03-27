@@ -35,7 +35,7 @@ $ms = $alertTriggeredAt->format('u') / 1000;
 $ms = str_pad($ms, 3, '0', STR_PAD_LEFT);
 $to   = $alertTriggeredAt->format('Y-m-d\TH:i:s') . "." . $ms . "Z";
 $from = clone $alertTriggeredAt;
-$from = $from->sub(new DateInterval('PT30M'))->format('Y-m-d\TH:i:s') . "." . $ms . "Z";
+$from = $from->sub(new DateInterval('PT10M'))->format('Y-m-d\TH:i:s') . "." . $ms . "Z";
 
 //error_log($from);
 //error_log($to);
@@ -52,10 +52,19 @@ $alertCondition = $arrInput['stream']['alert_conditions'][0];
 $message = "" . PHP_EOL;
 $alertTriggeredAt->setTimezone($twTz);
 $message = $message . PHP_EOL . "`[" . $arrInput['stream']['title'] . "] " . $alertTriggeredAt->format('Y-m-d H:i:s') . '`';
-$message = $message . PHP_EOL . $arrInput['check_result']['result_description'];
 $message = $message . PHP_EOL . urlencode($streamUrl);
-//$message = $message . PHP_EOL . "Alert Condition : "   . $alertCondition['title'];
 
+// get logs detail
+$checkResult = $arrInput["check_result"];
+$where = "";
+if (array_key_exists("matching_messages", $checkResult)) {
+    $matchingMessage = $checkResult["matching_messages"];
+    foreach($matchingMessage as $key => $value) {
+        $where = $where . PHP_EOL . $value["fields"]["name"] . " => " . $value["fields"]["file"];
+    }
+}
+
+$message = $message . PHP_EOL . $where;
 //error_log($message);
 
 $res = send_line_notify($message, TOKEN);
