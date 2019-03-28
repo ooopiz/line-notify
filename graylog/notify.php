@@ -60,7 +60,19 @@ $where = "";
 if (array_key_exists("matching_messages", $checkResult)) {
     $matchingMessage = $checkResult["matching_messages"];
     foreach($matchingMessage as $key => $value) {
-        $where = $where . PHP_EOL . $value["fields"]["name"] . " => " . $value["fields"]["file"];
+        $s1 = $value["fields"]["file"];
+        $s1 = str_replace("/deploy/www/", "", $s1);
+        $s1 = str_replace("/deploy/logs/app", "", $s1);
+        $s1 = str_replace("/deploy/logs/app-mall", "", $s1);
+        $s1 = str_replace("/deploy/logs/app-center", "", $s1);
+
+        if (strpos($s1, '/storage/logs'))
+            $s1 = substr($s1, 0, strpos($s1, '/storage/logs'));
+
+        if (strpos($s1, '/laravel'))
+            $s1 = substr($s1, 0, strpos($s1, '/laravel'));
+
+        $where = $where . PHP_EOL . $value["fields"]["name"] . " => " . $s1;
     }
 }
 
